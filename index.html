@@ -36,9 +36,19 @@
 <h3>Example</h3>
 
 <pre><code>
-
-
-
+<body>
+<canvas id="cvs" width="500" height="500"></canvas>
+<script type="text/javascript">
+  var jq = $("#cvs")
+  
+  myTree = new Tree({
+    jqSelector:jq
+  })
+  var treeTimer = setInterval(
+    function(){myTree.step() }
+  ,50)
+</script>
+</body>
 </code></pre>
 
 <h3>Support or Contact</h3>
