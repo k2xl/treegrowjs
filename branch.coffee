@@ -23,8 +23,8 @@ class Branch
         branch.spawn(right)
         left.savePosition()
         right.savePosition()
-        left.rotate(-Math.PI/8)
-        right.rotate(Math.PI/8)
+        left.rotate(-Math.PI/12)
+        right.rotate(Math.PI/12)
   spawn:(branch)->
     @branches.push(branch)
   rotate:(amount)->
@@ -39,7 +39,7 @@ class Branch
     Math.sqrt((@props.velocity[0]*@props.velocity[0])+(@props.velocity[1]*@props.velocity[1]))
   step:(count=1)->
     # console.log(@id,@get_speed())
-    @rotate( (Math.random()-.5)/10)
+    @rotate( (Math.random()-.5)/12)
     i = 0
     lng = @branches.length
     while (i < lng)

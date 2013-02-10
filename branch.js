@@ -29,8 +29,8 @@
           branch.spawn(right);
           left.savePosition();
           right.savePosition();
-          left.rotate(-Math.PI / 8);
-          return right.rotate(Math.PI / 8);
+          left.rotate(-Math.PI / 12);
+          return right.rotate(Math.PI / 12);
         }
       });
     }
@@ -60,7 +60,7 @@
       if (count == null) {
         count = 1;
       }
-      this.rotate((Math.random() - .5) / 10);
+      this.rotate((Math.random() - .5) / 12);
       i = 0;
       lng = this.branches.length;
       while (i < lng) {
