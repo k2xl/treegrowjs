@@ -15,14 +15,15 @@
       (_base = this.props).initial_health || (_base.initial_health = 100);
       (_base1 = this.props).color || (_base1.color = "#000000");
       (_base2 = this.props).branch_thickness || (_base2.branch_thickness = 7);
+      this.props.end_branch_thickness = this.props.branch_thickness * .8;
       this.health = this.props.initial_health;
       (_base3 = this.props).post_step || (_base3.post_step = function(branch) {
         var left, new_props, right;
         if (branch.props.initial_health > 10 && branch.branches.length < 1 && branch.health < branch.props.initial_health / 2) {
           new_props = jQuery.extend(true, {}, branch.props);
           new_props.initial_health *= .8;
-          new_props.branch_thickness *= .8;
-          new_props.color = averageColors(branch.props.color, "#" + (0xFFFFFF * Math.random()).toString(12), 1, 1);
+          new_props.branch_thickness = branch.props.end_branch_thickness;
+          new_props.color = averageColors(branch.props.color, "#" + (0xFFFFFF * Math.random()).toString(12), 10, 1);
           left = new Branch(jQuery.extend(true, {}, new_props));
           right = new Branch(jQuery.extend(true, {}, new_props));
           branch.spawn(left);
@@ -78,6 +79,7 @@
       }
       this.savePosition();
       this.health--;
+      this.percDone = 1 - this.health / this.props.initial_health;
       this.props.post_step(this);
       if (this.health <= 0) {
         return this.on_branch_dead();
@@ -106,7 +108,7 @@
       while (i < tempS) {
         vertex = this.vertices[i];
         prevVertex = this.vertices[i - 1];
-        ctx.lineWidth = this.props.branch_thickness;
+        ctx.lineWidth = this.props.branch_thickness - this.props.end_branch_thickness * this.percDone;
         ctx.beginPath();
         ctx.strokeStyle = this.props.color;
         ctx.moveTo(prevVertex[0], prevVertex[1]);

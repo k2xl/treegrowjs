@@ -10,13 +10,14 @@ class Branch
     @props.initial_health ||= 100
     @props.color ||= "#000000"
     @props.branch_thickness || = 7
+    @props.end_branch_thickness = @props.branch_thickness*.8
     @health = @props.initial_health
     @props.post_step ||=(branch)->
       if (branch.props.initial_health > 10 && branch.branches.length < 1 && branch.health < branch.props.initial_health/2)
         new_props = jQuery.extend(true,{},branch.props)
         new_props.initial_health*=.8;
-        new_props.branch_thickness*=.8
-        new_props.color = averageColors(branch.props.color,"#"+(0xFFFFFF*Math.random()).toString(12),1,1)
+        new_props.branch_thickness = branch.props.end_branch_thickness
+        new_props.color = averageColors(branch.props.color,"#"+(0xFFFFFF*Math.random()).toString(12),10,1)
         left = new Branch(jQuery.extend(true,{},new_props))
         right = new Branch(jQuery.extend(true,{},new_props))
         branch.spawn(left)
@@ -54,6 +55,7 @@ class Branch
       i++
     @savePosition()
     @health--
+    @percDone = 1-@health/@props.initial_health
     @props.post_step(this)
     if (@health <= 0)
       @on_branch_dead()
@@ -72,14 +74,13 @@ class Branch
     while (i < tempS)
       vertex = @vertices[i]
       prevVertex = @vertices[i-1]
-      ctx.lineWidth = @props.branch_thickness
+      ctx.lineWidth = (@props.branch_thickness-@props.end_branch_thickness*@percDone)
       ctx.beginPath();
       ctx.strokeStyle = @props.color
       ctx.moveTo(prevVertex[0],prevVertex[1]);
       ctx.lineTo(vertex[0],vertex[1]);
       ctx.stroke();
       i++
-    
   savePosition:->
     @vertices.push(@props.position.concat())
 window.Branch = Branch
