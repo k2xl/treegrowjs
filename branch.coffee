@@ -8,15 +8,15 @@ class Branch
     @savePosition()
     @id = Branch.ids++
     @props.initial_health ||= 100
+    @props.color ||= "#000000"
     @props.branch_thickness || = 7
     @health = @props.initial_health
     @props.post_step ||=(branch)->
       if (branch.props.initial_health > 10 && branch.branches.length < 1 && branch.health < branch.props.initial_health/2)
-        right_child_props= jQuery.extend(true,{},branch.props)
-        left_child_props = jQuery.extend(true,{},branch.props)
         new_props = jQuery.extend(true,{},branch.props)
         new_props.initial_health*=.8;
         new_props.branch_thickness*=.8
+        new_props.color = averageColors(branch.props.color,"#"+(0xFFFFFF*Math.random()).toString(12),1,1)
         left = new Branch(jQuery.extend(true,{},new_props))
         right = new Branch(jQuery.extend(true,{},new_props))
         branch.spawn(left)
@@ -25,6 +25,7 @@ class Branch
         right.savePosition()
         left.rotate(-Math.PI/12)
         right.rotate(Math.PI/12)
+		
   spawn:(branch)->
     @branches.push(branch)
   rotate:(amount)->
@@ -73,6 +74,7 @@ class Branch
       prevVertex = @vertices[i-1]
       ctx.lineWidth = @props.branch_thickness
       ctx.beginPath();
+      ctx.strokeStyle = @props.color
       ctx.moveTo(prevVertex[0],prevVertex[1]);
       ctx.lineTo(vertex[0],vertex[1]);
       ctx.stroke();

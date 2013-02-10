@@ -6,23 +6,23 @@
     Branch.ids = 0;
 
     function Branch(props) {
-      var _base, _base1, _base2;
+      var _base, _base1, _base2, _base3;
       this.props = props;
       this.vertices = [];
       this.branches = [];
       this.savePosition();
       this.id = Branch.ids++;
       (_base = this.props).initial_health || (_base.initial_health = 100);
-      (_base1 = this.props).branch_thickness || (_base1.branch_thickness = 7);
+      (_base1 = this.props).color || (_base1.color = "#000000");
+      (_base2 = this.props).branch_thickness || (_base2.branch_thickness = 7);
       this.health = this.props.initial_health;
-      (_base2 = this.props).post_step || (_base2.post_step = function(branch) {
-        var left, left_child_props, new_props, right, right_child_props;
+      (_base3 = this.props).post_step || (_base3.post_step = function(branch) {
+        var left, new_props, right;
         if (branch.props.initial_health > 10 && branch.branches.length < 1 && branch.health < branch.props.initial_health / 2) {
-          right_child_props = jQuery.extend(true, {}, branch.props);
-          left_child_props = jQuery.extend(true, {}, branch.props);
           new_props = jQuery.extend(true, {}, branch.props);
           new_props.initial_health *= .8;
           new_props.branch_thickness *= .8;
+          new_props.color = averageColors(branch.props.color, "#" + (0xFFFFFF * Math.random()).toString(12), 1, 1);
           left = new Branch(jQuery.extend(true, {}, new_props));
           right = new Branch(jQuery.extend(true, {}, new_props));
           branch.spawn(left);
@@ -108,6 +108,7 @@
         prevVertex = this.vertices[i - 1];
         ctx.lineWidth = this.props.branch_thickness;
         ctx.beginPath();
+        ctx.strokeStyle = this.props.color;
         ctx.moveTo(prevVertex[0], prevVertex[1]);
         ctx.lineTo(vertex[0], vertex[1]);
         ctx.stroke();
